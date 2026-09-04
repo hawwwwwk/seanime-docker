@@ -1,0 +1,11 @@
+services:
+  seanime:
+    build: .
+    container_name: seanime
+    ports:
+      - "43211:43211"
+    volumes:
+      - ./config:/config
+      - ../../../Videos/anime:/anime
+    environment:
+      - SEANIME_SERVER_HOST=0.0.0.0
