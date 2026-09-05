@@ -4,17 +4,18 @@
 
   <Repository>ethxn/seanime:latest</Repository>
   <Registry>https://hub.docker.com/r/ethxn/seanime</Registry>
-  <TemplateURL>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/unraid/seanime.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/templates/seanime.xml</TemplateURL>
 
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
 
-  <Icon>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/unraid/seanime.png</Icon>
+  <Icon>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/icons/seanime.png</Icon>
   <Support>https://github.com/hawwwwwk/seanime-docker/issues</Support>
   <Project>https://github.com/5rahim/seanime</Project>
   <ReadMe>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/README.md</ReadMe>
+  <License>GPLv3</License>
 
   <Overview>
     Seanime is an open-source media server and anime management application.
