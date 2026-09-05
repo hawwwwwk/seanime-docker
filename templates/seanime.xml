@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>Seanime</Name>
+
+  <Repository>ethxn/seanime:latest</Repository>
+  <Registry>https://hub.docker.com/r/ethxn/seanime</Registry>
+  <TemplateURL>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/unraid/seanime.xml</TemplateURL>
+
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+
+  <Icon>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/unraid/seanime.png</Icon>
+  <Support>https://github.com/hawwwwwk/seanime-docker/issues</Support>
+  <Project>https://github.com/5rahim/seanime</Project>
+  <ReadMe>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/README.md</ReadMe>
+
+  <Overview>
+    Seanime is an open-source media server and anime management application.
+    This container provides the Seanime server and web interface with FFmpeg support.
+    Application data is stored in /config and the anime library is mounted at /anime.
+  </Overview>
+
+  <Category>MediaApp:Video</Category>
+
+  <WebUI>http://[IP]:[PORT:43211]</WebUI>
+
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+
+  <Config
+    Name="WebUI Port"
+    Target="43211"
+    Default="43211"
+    Mode="tcp"
+    Description="Seanime web interface port."
+    Type="Port"
+    Display="always"
+    Required="true"
+    Mask="false">43211</Config>
+
+  <Config
+    Name="Appdata"
+    Target="/config"
+    Default="/mnt/user/appdata/seanime"
+    Mode="rw"
+    Description="Persistent Seanime configuration, database, cache, and application data."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/appdata/seanime</Config>
+
+  <Config
+    Name="Anime Library"
+    Target="/anime"
+    Default="/mnt/user/media/Seanime"
+    Mode="rw"
+    Description="Path to your anime library."
+    Type="Path"
+    Display="always"
+    Required="true"
+    Mask="false">/mnt/user/media/Seanime</Config>
+
+  <Config
+    Name="Server Host"
+    Target="SEANIME_SERVER_HOST"
+    Default="0.0.0.0"
+    Mode=""
+    Description="Seanime server bind address. Leave this as 0.0.0.0 when running in Docker."
+    Type="Variable"
+    Display="advanced"
+    Required="true"
+    Mask="false">0.0.0.0</Config>
+</Container>
