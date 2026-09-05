@@ -4,14 +4,14 @@
 
   <Repository>ethxn/seanime:latest</Repository>
   <Registry>https://hub.docker.com/r/ethxn/seanime</Registry>
-  <TemplateURL>https://raw.githubusercontent.com/ethxn/seanime-docker/main/unraid/seanime.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/unraid/seanime.xml</TemplateURL>
 
   <Network>bridge</Network>
   <MyIP/>
   <Shell>sh</Shell>
   <Privileged>false</Privileged>
 
-  <Icon>https://raw.githubusercontent.com/ethxn/seanime-docker/main/unraid/seanime.png</Icon>
+  <Icon>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/unraid/seanime.png</Icon>
   <Support>https://github.com/5rahim/seanime/issues</Support>
   <Project>https://github.com/5rahim/seanime</Project>
 
