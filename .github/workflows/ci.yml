@@ -1,0 +1,79 @@
+name: Seanime Docker CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build and test container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Validate Unraid XML
+        run: |
+          python3 - <<'PY'
+          import glob
+          import xml.etree.ElementTree as ET
+
+          files = ["ca_profile.xml", *glob.glob("templates/*.xml")]
+
+          for filename in files:
+              ET.parse(filename)
+              print(f"Valid XML: {filename}")
+          PY
+
+      - name: Build Docker image
+        run: |
+          docker build -t seanime-ci:${{ github.sha }} .
+
+      - name: Verify container tools
+        run: |
+          docker run --rm \
+            --entrypoint sh \
+            seanime-ci:${{ github.sha }} \
+            -c 'ffmpeg -version >/dev/null &&
+                ffprobe -version >/dev/null &&
+                fc-match "Noto Sans CJK JP"'
+
+      - name: Start Seanime
+        run: |
+          docker run -d \
+            --name seanime-ci \
+            -e SEANIME_SERVER_HOST=0.0.0.0 \
+            -p 43211:43211 \
+            seanime-ci:${{ github.sha }}
+
+      - name: Wait for WebUI
+        run: |
+          for i in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:43211/ >/dev/null; then
+              echo "Seanime WebUI is responding!"
+              exit 0
+            fi
+
+            echo "Waiting for Seanime..."
+            sleep 2
+          done
+
+          echo "Seanime failed to start."
+          docker logs seanime-ci
+          exit 1
+
+      - name: Show container logs
+        if: always()
+        run: |
+          docker logs seanime-ci || true
+
+      - name: Clean up container
+        if: always()
+        run: |
+          docker rm -f seanime-ci || true
