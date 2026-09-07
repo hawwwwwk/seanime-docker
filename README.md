@@ -1,3 +1,105 @@
+<h2>Docker / Unraid</h2>
+
+<p>
+  This repository also builds a Docker image for running Seanime as a self-hosted container, with support for Unraid.
+</p>
+
+<blockquote>
+  <p>
+    This Docker image is community-maintained and is not an official Seanime container.
+  </p>
+</blockquote>
+
+<h3>Docker image</h3>
+
+<pre><code>ethxn/seanime:latest</code></pre>
+
+<p>A version-pinned image is also available:</p>
+
+<pre><code>ethxn/seanime:3.10.2-1</code></pre>
+
+<p>
+  The image currently packages Seanime 3.10.2-Saisei.
+</p>
+
+<h3>Container configuration</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Setting</th>
+      <th>Container value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Web UI</td>
+      <td><code>43211/tcp</code></td>
+    </tr>
+    <tr>
+      <td>Application data</td>
+      <td><code>/config</code></td>
+    </tr>
+    <tr>
+      <td>Anime library</td>
+      <td><code>/anime</code></td>
+    </tr>
+    <tr>
+      <td>Server bind address</td>
+      <td><code>SEANIME_SERVER_HOST=0.0.0.0</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Application data stored under <code>/config</code> is persistent and should be mapped to a host directory.
+</p>
+
+<p>Example:</p>
+
+<pre><code>docker run -d \
+  --name Seanime \
+  -p 43211:43211 \
+  -e SEANIME_SERVER_HOST=0.0.0.0 \
+  -v /path/to/seanime/config:/config \
+  -v /path/to/anime:/anime \
+  ethxn/seanime:latest
+</code></pre>
+
+<h3>Unraid</h3>
+
+<p>
+  An Unraid Docker template is included with this repository.
+</p>
+
+<p>Recommended mappings:</p>
+
+<pre><code>/mnt/user/appdata/seanime -&gt; /config
+/path/to/your/anime       -&gt; /anime
+</code></pre>
+
+<p>The WebUI is available at:</p>
+
+<pre><code>http://&lt;UNRAID-IP&gt;:43211</code></pre>
+
+<h3>Media transcoding</h3>
+
+<p>
+  FFmpeg is included in the container, so software transcoding works without installing FFmpeg on the host!
+</p>
+
+<p>
+  Hardware acceleration is optional and depends on the Docker host configuration.
+  GPU devices and appropriate host drivers or runtimes must be made available to the container separately.
+</p>
+
+<h3>Embedded font attachments</h3>
+
+<p>
+  This image currently contains a fix for FFmpeg attachment extraction when MKV font attachment filenames contain spaces.
+  The change has been tested against media that failed with the original extraction behavior and is pending upstream review.
+</p>
+
 <p align="center">
 <a href="https://seanime.app/">
 <img src="docs/images/seanime-logo.png" alt="preview" width="70px"/>

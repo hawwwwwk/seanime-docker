@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<CommunityApplications>
+  <Profile>
+    Community-maintained Unraid template and Docker image for Seanime.
+  </Profile>
+
+  <Icon>https://raw.githubusercontent.com/hawwwwwk/seanime-docker/main/icons/seanime.png</Icon>
+
+  <WebPage>https://github.com/hawwwwwk/seanime-docker</WebPage>
+</CommunityApplications>
