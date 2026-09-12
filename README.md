@@ -48,11 +48,25 @@
       <td>Server bind address</td>
       <td><code>SEANIME_SERVER_HOST=0.0.0.0</code></td>
     </tr>
+    <tr>
+      <td>User ID</td>
+      <td><code>PUID=1000</code></td>
+    </tr>
+    <tr>
+      <td>Group ID</td>
+      <td><code>PGID=1000</code></td>
+    </tr>
   </tbody>
 </table>
 
 <p>
   Application data stored under <code>/config</code> is persistent and should be mapped to a host directory.
+</p>
+
+<p>
+  The container runs Seanime as the user and group specified by <code>PUID</code> and <code>PGID</code>.
+  These default to <code>1000:1000</code>. The container adjusts ownership of <code>/config</code>
+  at startup, but never changes ownership of files under <code>/anime</code>.
 </p>
 
 <p>Example:</p>
@@ -61,6 +75,8 @@
   --name Seanime \
   -p 43211:43211 \
   -e SEANIME_SERVER_HOST=0.0.0.0 \
+  -e PUID=1000 \
+  -e PGID=1000 \
   -v /path/to/seanime/config:/config \
   -v /path/to/anime:/anime \
   ethxn/seanime:latest
@@ -74,9 +90,14 @@
 
 <p>Recommended mappings:</p>
 
-<pre><code>/mnt/user/appdata/seanime -&gt; /config
-/path/to/your/anime       -&gt; /anime
+<pre><code>/mnt/user/appdata/seanime -> /config
+/path/to/your/anime       -> /anime
 </code></pre>
+
+<p>
+  The Unraid template defaults to <code>PUID=99</code> and <code>PGID=100</code>,
+  matching Unraid's typical <code>nobody:users</code> ownership.
+</p>
 
 <p>The WebUI is available at:</p>
 
@@ -85,7 +106,7 @@
 <h3>Media transcoding</h3>
 
 <p>
-  FFmpeg is included in the container, so software transcoding works without installing FFmpeg on the host!
+  Jellyfin FFmpeg is included in the container, so software transcoding works without installing FFmpeg on the host.
 </p>
 
 <p>
