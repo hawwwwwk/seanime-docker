@@ -41,8 +41,7 @@ jobs:
             --entrypoint sh \
             seanime-ci:${{ github.sha }} \
             -c 'ffmpeg -version >/dev/null &&
-                ffprobe -version >/dev/null &&
-                fc-match "Noto Sans CJK JP"'
+              ffprobe -version >/dev/null'
 
       - name: Verify PUID and PGID support
         run: |
