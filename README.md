@@ -93,13 +93,6 @@
   GPU devices and appropriate host drivers or runtimes must be made available to the container separately.
 </p>
 
-<h3>Embedded font attachments</h3>
-
-<p>
-  This image currently contains a fix for FFmpeg attachment extraction when MKV font attachment filenames contain spaces.
-  The change has been tested against media that failed with the original extraction behavior and is pending upstream review.
-</p>
-
 <p align="center">
 <a href="https://seanime.app/">
 <img src="docs/images/seanime-logo.png" alt="preview" width="70px"/>

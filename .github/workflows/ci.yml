@@ -44,13 +44,66 @@ jobs:
                 ffprobe -version >/dev/null &&
                 fc-match "Noto Sans CJK JP"'
 
+      - name: Verify PUID and PGID support
+        run: |
+          docker run --rm \
+            -e PUID=99 \
+            -e PGID=100 \
+            seanime-ci:${{ github.sha }} \
+            sh -c '
+              test "$(id -u)" = "99" &&
+              test "$(id -g)" = "100" &&
+              touch /config/permission-test &&
+              test "$(stat -c %u /config/permission-test)" = "99" &&
+              test "$(stat -c %g /config/permission-test)" = "100"
+            '
+      - name: Verify anime ownership is untouched
+        run: |
+          docker volume create seanime-anime-ci
+
+          docker run --rm \
+            --entrypoint sh \
+            -v seanime-anime-ci:/anime \
+            seanime-ci:${{ github.sha }} \
+            -c 'touch /anime/ownership-test &&
+                chown 1234:1234 /anime/ownership-test'
+
+          OWNER="$(docker run --rm \
+            -e PUID=99 \
+            -e PGID=100 \
+            -v seanime-anime-ci:/anime \
+            seanime-ci:${{ github.sha }} \
+            sh -c 'stat -c "%u:%g" /anime/ownership-test')"
+
+          echo "Anime test file ownership: $OWNER"
+
+          if [ "$OWNER" != "1234:1234" ]; then
+            echo "ERROR: /anime ownership was modified."
+            exit 1
+          fi
+
+          docker volume rm seanime-anime-ci
+
       - name: Start Seanime
         run: |
           docker run -d \
             --name seanime-ci \
+            -e PUID=99 \
+            -e PGID=100 \
             -e SEANIME_SERVER_HOST=0.0.0.0 \
             -p 43211:43211 \
             seanime-ci:${{ github.sha }}
+
+      - name: Verify Seanime runs non-root
+        run: |
+          UID_VALUE="$(docker exec seanime-ci sh -c "awk '/^Uid:/ {print \$2}' /proc/1/status")"
+          GID_VALUE="$(docker exec seanime-ci sh -c "awk '/^Gid:/ {print \$2}' /proc/1/status")"
+
+          echo "Seanime UID: $UID_VALUE"
+          echo "Seanime GID: $GID_VALUE"
+
+          test "$UID_VALUE" = "99"
+          test "$GID_VALUE" = "100"
 
       - name: Wait for healthy container
         run: |
@@ -96,3 +149,4 @@ jobs:
         if: always()
         run: |
           docker rm -f seanime-ci || true
+          docker volume rm seanime-anime-ci || true

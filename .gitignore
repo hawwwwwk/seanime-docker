@@ -80,6 +80,7 @@ internal/extension_repo/**/test*.*
 internal/extension_repo/goja_plugin_test
 
 *.sh
+!docker-entrypoint.sh
 
 seanime-web-tr/
 codegen/nonext/
