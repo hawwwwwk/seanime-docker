@@ -39,6 +39,7 @@ RUN apt-get update && \
         ffmpeg \
         fontconfig \
         fonts-noto-cjk \
+        gosu \
         curl && \
     rm -rf /var/lib/apt/lists/*
 
