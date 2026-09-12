@@ -47,7 +47,6 @@ COPY --from=server-builder /app/seanime /app/seanime
 WORKDIR /app
 
 EXPOSE 43211
-EXPOSE 43211
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD curl --fail --silent --show-error http://127.0.0.1:43211/ > /dev/null || exit 1
