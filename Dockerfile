@@ -42,6 +42,9 @@ RUN apt-get update && \
         curl && \
     rm -rf /var/lib/apt/lists/*
 
+RUN groupadd --gid 1000 seanime && \
+    useradd --uid 1000 --gid seanime --create-home --shell /usr/sbin/nologin seanime
+
 COPY --from=server-builder /app/seanime /app/seanime
 
 WORKDIR /app
