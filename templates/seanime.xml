@@ -74,4 +74,24 @@
     Display="advanced"
     Required="true"
     Mask="false">0.0.0.0</Config>
+
+  <Config Name="PUID"
+    Target="PUID"
+    Default="99"
+    Mode=""
+    Description="User ID used to run Seanime. The default of 99 matches the Unraid 'nobody' user."
+    Type="Variable"
+    Display="advanced"
+    Required="true"
+    Mask="false">99</Config>
+
+  <Config Name="PGID"
+    Target="PGID"
+    Default="100"
+    Mode=""
+    Description="Group ID used to run Seanime. The default of 100 matches the Unraid 'users' group."
+    Type="Variable"
+    Display="advanced"
+    Required="true"
+    Mask="false">100</Config>
 </Container>
