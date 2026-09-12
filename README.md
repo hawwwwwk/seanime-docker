@@ -16,7 +16,7 @@
 
 <p>A version-pinned image is also available:</p>
 
-<pre><code>ethxn/seanime:3.10.2-1</code></pre>
+<pre><code>ethxn/seanime:3.10.2-2</code></pre>
 
 <p>
   The image currently packages Seanime 3.10.2-Saisei.
