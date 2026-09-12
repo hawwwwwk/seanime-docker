@@ -52,21 +52,40 @@ jobs:
             -p 43211:43211 \
             seanime-ci:${{ github.sha }}
 
-      - name: Wait for WebUI
+      - name: Wait for healthy container
         run: |
           for i in $(seq 1 60); do
-            if curl --fail --silent http://127.0.0.1:43211/ >/dev/null; then
-              echo "Seanime WebUI is responding!"
-              exit 0
-            fi
+            HEALTH="$(docker inspect --format='{{.State.Health.Status}}' seanime-ci 2>/dev/null || true)"
 
-            echo "Waiting for Seanime..."
+            echo "Seanime health status: ${HEALTH:-unknown}"
+
+            case "$HEALTH" in
+              healthy)
+                echo "Seanime container is healthy!"
+                exit 0
+                ;;
+              unhealthy)
+                echo "Seanime container became unhealthy."
+                docker inspect --format='{{json .State.Health}}' seanime-ci || true
+                exit 1
+                ;;
+            esac
+
             sleep 2
           done
 
-          echo "Seanime failed to start."
-          docker logs seanime-ci
+          echo "Seanime did not become healthy before timeout."
+          docker inspect --format='{{json .State.Health}}' seanime-ci || true
           exit 1
+
+      - name: Verify WebUI
+        run: |
+          if curl --fail --silent http://127.0.0.1:43211/ >/dev/null; then
+            echo "Seanime WebUI is responding!"
+          else
+            echo "Seanime WebUI is not responding."
+            exit 1
+          fi
 
       - name: Show container logs
         if: always()
