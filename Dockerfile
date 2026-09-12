@@ -25,7 +25,7 @@ COPY . .
 
 COPY --from=frontend-builder /app/seanime-web/out/ /app/web/
 
-RUN go build -o seanime -trimpath -ldflags="-s -w"
+RUN CGO_ENABLED=0 go build -tags timetzdata -o seanime -trimpath -ldflags="-s -w"
 
 
 FROM debian:13-slim AS runtime
