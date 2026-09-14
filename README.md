@@ -114,6 +114,12 @@
   GPU devices and appropriate host drivers or runtimes must be made available to the container separately.
 </p>
 
+## AI Disclosure
+
+- Tool(s) used: ChatGPT, Claude, Codex
+- What AI was used for: Non-unraid & Unraid Docker instructions, boilerplate, and formatting.
+- How you verified the change fits Seanime's architecture: Instructions were all tested and verified to work on a local Unraid server and Docker host.
+
 <p align="center">
 <a href="https://seanime.app/">
 <img src="docs/images/seanime-logo.png" alt="preview" width="70px"/>
