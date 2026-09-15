@@ -147,3 +147,18 @@ jobs:
         run: |
           docker rm -f seanime-ci || true
           docker volume rm seanime-anime-ci || true
+  required-check:
+    name: Build and test container
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+
+    steps:
+      - name: Verify all architecture tests passed
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "One or more architecture tests failed."
+            exit 1
+          fi
+
+          echo "All architecture tests passed."
