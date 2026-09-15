@@ -16,11 +16,21 @@
 
 <p>A version-pinned image is also available:</p>
 
-<pre><code>ethxn/seanime:3.10.2-2</code></pre>
+<pre><code>ethxn/seanime:3.10.2-3</code></pre>
 
 <p>
   The image currently packages Seanime 3.10.2-Saisei.
 </p>
+
+<h3>Canary image</h3>
+
+<p>This project also packages the latest Seanime canary app versions:</p>
+
+<pre><code>ethxn/seanime:canary</code></pre>
+
+<p>Pinned:</p>
+
+<pre><code>ethxn/seanime:canary-3e03b73b</code></pre>
 
 <h3>Container configuration</h3>
 
