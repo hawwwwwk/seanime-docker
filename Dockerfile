@@ -1,4 +1,4 @@
-FROM node:22 AS frontend-builder
+FROM --platform=$BUILDPLATFORM node:22 AS frontend-builder
 
 WORKDIR /app
 
@@ -13,7 +13,10 @@ COPY seanime-web/ /app/seanime-web/
 RUN npm run build
 
 
-FROM golang:1.26.2 AS server-builder
+FROM --platform=$BUILDPLATFORM golang:1.26.2 AS server-builder
+
+ARG TARGETOS
+ARG TARGETARCH
 
 WORKDIR /app
 
@@ -25,8 +28,10 @@ COPY . .
 
 COPY --from=frontend-builder /app/seanime-web/out/ /app/web/
 
-RUN CGO_ENABLED=0 go build -tags timetzdata -o seanime -trimpath -ldflags="-s -w"
-
+RUN CGO_ENABLED=0 \
+    GOOS=$TARGETOS \
+    GOARCH=$TARGETARCH \
+    go build -tags timetzdata -o seanime -trimpath -ldflags="-s -w"
 
 FROM alpine:3.23 AS runtime
 
