@@ -1,5 +1,10 @@
 <h2>Docker / Unraid</h2>
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/ethxn/seanime?logo=docker&label=pulls)](https://hub.docker.com/r/ethxn/seanime)
+[![CI](https://github.com/hawwwwwk/seanime-docker/actions/workflows/ci.yml/badge.svg)](https://github.com/hawwwwwk/seanime-docker/actions/workflows/ci.yml)
+[![Seanime Release](https://img.shields.io/github/v/release/5rahim/seanime?label=Seanime%20release&logo=github)](https://github.com/5rahim/seanime/releases/latest)
+[![Architectures](https://img.shields.io/badge/architectures-amd64%20%7C%20arm64-blue?logo=docker)](https://hub.docker.com/r/ethxn/seanime/tags)
+
 <p>
   This repository also builds a Docker image for running Seanime as a self-hosted container, with support for Unraid.
 </p>
