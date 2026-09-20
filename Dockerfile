@@ -2,7 +2,7 @@ FROM --platform=$BUILDPLATFORM node:22 AS frontend-builder
 
 WORKDIR /app
 
-COPY seanime-web/package.json seanime-web/package-lock.json ./seanime-web/
+COPY seanime-web/package.json seanime-web/package-lock.json seanime-web/.npmrc ./seanime-web/
 
 WORKDIR /app/seanime-web
 
@@ -13,7 +13,7 @@ COPY seanime-web/ /app/seanime-web/
 RUN npm run build
 
 
-FROM --platform=$BUILDPLATFORM golang:1.26.2 AS server-builder
+FROM --platform=$BUILDPLATFORM golang:1.27.1 AS server-builder
 
 ARG TARGETOS
 ARG TARGETARCH
