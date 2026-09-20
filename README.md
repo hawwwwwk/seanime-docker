@@ -35,7 +35,7 @@
 
 <p>Pinned:</p>
 
-<pre><code>ethxn/seanime:canary-3e03b73b</code></pre>
+<pre><code>ethxn/seanime:canary-b2a779a6</code></pre>
 
 <h3>Container configuration</h3>
 
