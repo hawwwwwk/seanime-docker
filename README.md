@@ -21,10 +21,10 @@
 
 <p>A version-pinned image is also available:</p>
 
-<pre><code>ethxn/seanime:3.10.2-3</code></pre>
+<pre><code>ethxn/seanime:3.10.3</code></pre>
 
 <p>
-  The image currently packages Seanime 3.10.2-Saisei.
+  The image currently packages Seanime 3.10.3-Saisei.
 </p>
 
 <h3>Canary image</h3>
