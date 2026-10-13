@@ -27,7 +27,23 @@ if [ "$(id -u)" = "0" ]; then
     # Never change ownership of /anime.
     export HOME=/home/seanime
 
-    exec su-exec "$PUID:$PGID" "$@"
+    # Preserve Docker-assigned supplementary groups, excluding root (GID 0)
+    # and the primary GID, which setpriv assigns separately.
+    extra_groups=""
+    for gid in $(id -G); do
+        case "$gid" in
+            0|"$PGID") continue ;;
+        esac
+        extra_groups="${extra_groups:+$extra_groups,}$gid"
+    done
+
+    if [ -n "$extra_groups" ]; then
+        exec setpriv --reuid="$PUID" --regid="$PGID" \
+            --groups="$extra_groups" -- "$@"
+    fi
+
+    exec setpriv --reuid="$PUID" --regid="$PGID" \
+        --clear-groups -- "$@"
 fi
 
 exec "$@"
