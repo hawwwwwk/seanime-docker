@@ -45,7 +45,7 @@ RUN set -eux; \
         ca-certificates \
         curl \
         tzdata \
-        gosu; \
+        util-linux; \
     curl -fSL \
         "https://github.com/jellyfin/jellyfin-ffmpeg/releases/download/v${JELLYFIN_FFMPEG_VERSION}/jellyfin-ffmpeg7_${JELLYFIN_FFMPEG_VERSION}-trixie_${TARGETARCH}.deb" \
         -o /tmp/jellyfin-ffmpeg.deb; \
@@ -62,7 +62,8 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV PUID=1000 \
-    PGID=1000
+    PGID=1000 \
+    NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
 
 WORKDIR /app
 
