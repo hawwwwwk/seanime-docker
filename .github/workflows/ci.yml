@@ -58,6 +58,56 @@ jobs:
           docker run --rm             --platform "${{ matrix.platform }}"             --entrypoint sh             seanime-ci:${{ matrix.arch }}-${{ github.sha }}             -c 'ffmpeg -version >/dev/null &&
                 ffprobe -version >/dev/null'
 
+      - name: Verify FFmpeg encoder availability
+        run: |
+          docker run --rm \
+            --platform "${{ matrix.platform }}" \
+            --entrypoint sh \
+            seanime-ci:${{ matrix.arch }}-${{ github.sha }} \
+            -ec '
+              ffmpeg -hide_banner -encoders > /tmp/ffmpeg-encoders
+              for encoder in libx264 h264_nvenc; do
+                if ! grep -Eq "[[:space:]]${encoder}[[:space:]]" /tmp/ffmpeg-encoders; then
+                  echo "Missing required FFmpeg encoder: $encoder"
+                  exit 1
+                fi
+              done
+              if [ "${{ matrix.arch }}" = "amd64" ]; then
+                for encoder in hevc_nvenc h264_qsv h264_vaapi; do
+                  if ! grep -Eq "[[:space:]]${encoder}[[:space:]]" /tmp/ffmpeg-encoders; then
+                    echo "Missing required FFmpeg encoder: $encoder"
+                    exit 1
+                  fi
+                done
+              fi
+            '
+
+      - name: Verify CPU video transcoding
+        run: |
+          docker run --rm \
+            --platform "${{ matrix.platform }}" \
+            seanime-ci:${{ matrix.arch }}-${{ github.sha }} \
+            ffmpeg -hide_banner -loglevel error \
+            -f lavfi -i 'testsrc2=size=320x180:rate=24' \
+            -frames:v 24 -c:v libx264 -f null -
+
+      - name: Verify supplementary GPU group retention
+        run: |
+          docker run --rm \
+            --platform "${{ matrix.platform }}" \
+            --group-add 12345 \
+            -e PUID=99 -e PGID=100 \
+            seanime-ci:${{ matrix.arch }}-${{ github.sha }} \
+            sh -ec '
+              test "$(id -u)" = 99
+              test "$(id -g)" = 100
+              id -G | grep -Eq "(^| )12345( |$)"
+              if id -G | grep -Eq "(^| )0( |$)"; then
+                echo "Root supplementary group leaked into non-root process"
+                exit 1
+              fi
+            '
+
       - name: Verify PUID and PGID support
         run: |
           docker run --rm             --platform "${{ matrix.platform }}"             -e PUID=99             -e PGID=100             seanime-ci:${{ matrix.arch }}-${{ github.sha }}             sh -c '
