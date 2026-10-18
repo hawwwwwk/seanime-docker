@@ -33,7 +33,7 @@ RUN CGO_ENABLED=0 \
     GOARCH=$TARGETARCH \
     go build -tags timetzdata -o seanime -trimpath -ldflags="-s -w"
 
-    
+
 FROM debian:trixie-slim AS runtime
 
 ARG TARGETARCH
