@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:22 AS frontend-builder
+FROM --platform=$BUILDPLATFORM node:22.23.4 AS frontend-builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY seanime-web/ /app/seanime-web/
 RUN npm run build
 
 
-FROM --platform=$BUILDPLATFORM golang:1.27.1 AS server-builder
+FROM --platform=$BUILDPLATFORM golang:1.27.3 AS server-builder
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -33,6 +33,9 @@ RUN CGO_ENABLED=0 \
     GOARCH=$TARGETARCH \
     go build -tags timetzdata -o seanime -trimpath -ldflags="-s -w"
 
+# Check the toolchain embedded in the compiled binary, including cross-built binaries.
+RUN go version -m /app/seanime | grep -Fq 'go1.27.3'
+
 
 FROM debian:trixie-slim AS runtime
 
@@ -46,9 +49,22 @@ RUN set -eux; \
         curl \
         tzdata \
         util-linux; \
-    curl -fSL \
+    ca_version="$(dpkg-query -W -f='${Version}' ca-certificates)"; \
+    if ! dpkg --compare-versions "$ca_version" ge '20250419+deb13u1'; then \
+        echo "ERROR: ca-certificates $ca_version is older than the security-fixed version" >&2; \
+        exit 1; \
+    fi; \
+    echo "Verified ca-certificates version: $ca_version"; \
+    curl --fail --show-error --silent --location --retry 3 \
         "https://github.com/jellyfin/jellyfin-ffmpeg/releases/download/v${JELLYFIN_FFMPEG_VERSION}/jellyfin-ffmpeg7_${JELLYFIN_FFMPEG_VERSION}-trixie_${TARGETARCH}.deb" \
         -o /tmp/jellyfin-ffmpeg.deb; \
+    case "$TARGETARCH" in \
+        amd64) ffmpeg_sha256='8e30f9f7f3958c524bec8334540e4241145ad4300b328a08a55783c619187225' ;; \
+        arm64) ffmpeg_sha256='a8fa3ec7cf8fbaf06bb4fdb768d4dd7798277fe4c4b66884c777dc7d575877fb' ;; \
+        *) echo "ERROR: unsupported architecture: $TARGETARCH" >&2; exit 1 ;; \
+    esac; \
+    printf '%s  %s\n' "$ffmpeg_sha256" /tmp/jellyfin-ffmpeg.deb | sha256sum --check --status; \
+    echo "Verified jellyfin-ffmpeg ${JELLYFIN_FFMPEG_VERSION} ($TARGETARCH) SHA-256"; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         /tmp/jellyfin-ffmpeg.deb; \
     ln -s /usr/lib/jellyfin-ffmpeg/ffmpeg /usr/local/bin/ffmpeg; \
