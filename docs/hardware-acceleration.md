@@ -2,9 +2,7 @@
 
 [← Seanime Docker README](../README.md)
 
-The container bundles Jellyfin FFmpeg for CPU transcoding and includes hardware encoders such as NVIDIA NVENC, Intel Quick Sync Video (QSV), and VAAPI. **Having an encoder listed by FFmpeg is not proof that your GPU can use it.** Actual GPU transcoding depends on device access, driver/runtime compatibility, and Seanime's transcoding settings.
-
-These instructions apply to the image once the corresponding FFmpeg update is published. Check the [available tags](https://hub.docker.com/r/ethxn/seanime/tags); an older published tag may have different encoder support.
+The container bundles [Jellyfin FFmpeg](https://github.com/jellyfin/jellyfin-ffmpeg) for CPU transcoding and includes hardware encoders such as NVIDIA NVENC, Intel Quick Sync Video (QSV), and VAAPI. Actual GPU transcoding depends on device access and Seanime's transcoding settings.
 
 ## CPU (no GPU)
 
@@ -29,7 +27,7 @@ docker run -d \
   ethxn/seanime:latest
 ```
 
-Alternatively, supported modern Docker Compose versions allow `gpus: all` on the service. The image sets `NVIDIA_DRIVER_CAPABILITIES=compute,video,utility` by default; you still need to grant GPU access through Docker.
+Alternatively, supported modern Docker Compose versions allow `gpus: all` on the service. The image sets `NVIDIA_DRIVER_CAPABILITIES=compute,video,utility` by default; you still need to grant GPU access through Docker's settings.
 
 Check GPU visibility:
 
@@ -38,8 +36,6 @@ docker exec seanime nvidia-smi
 ```
 
 In Seanime, enable transcoding and select NVIDIA hardware acceleration. Confirm playback uses the transcoding player rather than direct play. Seanime logs can show `hardware acceleration resolved backend=nvidia`.
-
-**Verification:** NVENC H.264 encoding was successfully tested on an RTX 4060 with this container, including as a non-root UID/GID. Other GPU models were not physically tested.
 
 ## Intel QSV and Intel/AMD VAAPI (Linux)
 
@@ -67,7 +63,7 @@ ls -ln /dev/dri/
 
 If the render node is owned by a supplementary group your PUID/PGID doesn't belong to, add that **numeric** GID using Compose `group_add` (or Docker `--group-add`). The entrypoint preserves supplementary groups across the privilege drop. If there is no render node or compatible driver, simply mounting `/dev/dri` may not be sufficient.
 
-In Seanime, choose Intel/QSV or VAAPI acceleration as appropriate for your hardware and monitor logs during playback. The bundled FFmpeg exposes the relevant encoders, but **physical Intel/AMD hardware encoding has not yet been verified by this project**.
+In Seanime, choose Intel/QSV or VAAPI acceleration as appropriate for your hardware and monitor logs during playback.
 
 ## Diagnostics
 
@@ -85,4 +81,4 @@ docker logs seanime 2>&1 | grep -Ei 'hardware acceleration|nvenc|vaapi|qsv|ffmpe
 
 If hardware transcoding fails, verify that CPU transcoding works first, then check GPU visibility, device access, permissions, and that Seanime is actually set to **transcode** (not direct play).
 
-Report reproducible issues with your host OS, GPU model, Docker flags, Seanime hardware setting, and relevant log excerpts in [seanime-docker issues](https://github.com/hawwwwwk/seanime-docker/issues).
+Please report issues with your host OS, GPU model, Docker flags, Seanime hardware setting, and relevant log excerpts in [seanime-docker issues](https://github.com/hawwwwwk/seanime-docker/issues).
