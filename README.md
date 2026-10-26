@@ -38,7 +38,7 @@ Replace `/path/to/your/anime` with the absolute path to your library. Then start
 docker compose up -d
 ```
 
-Open **http://localhost:43211**, or replace `localhost` with the Docker host's IP address. Point Seanime's library scanner at `/anime`.
+Open **http://localhost:43211**, or replace `localhost` with the Docker host's IP address. Point Seanime's library scanner at `/anime` when setting up Seanime.
 
 The image does not include anime files; supply your own library. If you only need scanning and playback, you can mount the library read-only (`/path/to/your/anime:/anime:ro`). Use a writable mount if you want Seanime to modify files.
 
@@ -65,7 +65,7 @@ docker run -d \
 | `canary` | Latest published development build; may contain breaking changes. |
 | `canary-<commit>` | Commit-pinned canary image, when published. |
 
-See [Docker Hub tags](https://hub.docker.com/r/ethxn/seanime/tags) for the actual available versions. New code and documentation in this repository may not yet be included in a published image.
+See [Docker Hub tags](https://hub.docker.com/r/ethxn/seanime/tags) for the actual available versions.
 
 ## Configuration
 
@@ -84,21 +84,21 @@ Other media paths, such as downloads, can be mounted separately and configured i
 
 ## Transcoding and hardware acceleration
 
-Jellyfin FFmpeg is bundled; **software transcoding requires no FFmpeg installation on the host**.
+[Jellyfin FFmpeg](https://github.com/jellyfin/jellyfin-ffmpeg) is bundled; **software transcoding requires no FFmpeg installation on the host**.
 
 The image includes FFmpeg encoders for NVIDIA NVENC, Intel Quick Sync Video (QSV), and VAAPI, but using them requires suitable GPU hardware, host drivers, and Docker device access. The container alone cannot enable host GPU acceleration.
 
-- **NVIDIA:** Pass GPUs into Docker (for example, `--gpus all`) and configure the NVIDIA runtime/toolkit on the host. NVIDIA NVENC encoding has been tested on an RTX 4060.
-- **Intel / AMD:** Pass `/dev/dri` into the container and grant the container user access to the relevant device groups. Encoder availability has been tested; execution on physical Intel/AMD GPUs has **not** been verified in this project.
+- **NVIDIA:** Pass GPUs into Docker (for example, `--gpus all`) and configure the NVIDIA runtime/toolkit on the host.
+- **Intel / AMD:** Pass `/dev/dri` into the container and grant the container user access to the relevant device groups.
 - **No GPU:** CPU transcoding remains available.
 
 See the [hardware acceleration guide](docs/hardware-acceleration.md) for setup examples and troubleshooting.
 
 ## Other installation guides
 
-- [Unraid](docs/unraid.md) — Community Applications/template setup, paths, IDs, and GPU passthrough.
-- [Hardware acceleration](docs/hardware-acceleration.md) — NVIDIA, QSV, VAAPI, and permission considerations.
-- [Docker Hub image](https://hub.docker.com/r/ethxn/seanime) — published tags and pulls.
+- [Unraid](docs/unraid.md) - Community Applications/template setup, paths, IDs, and GPU passthrough.
+- [Hardware acceleration](docs/hardware-acceleration.md) - NVIDIA, QSV, VAAPI, and permission considerations.
+- [Docker Hub image](https://hub.docker.com/r/ethxn/seanime) - published tags and pulls.
 
 ## Support and attribution
 
@@ -108,4 +108,4 @@ Seanime and this Docker distribution are separate projects. See the repository [
 
 ### AI disclosure
 
-Documentation and container implementation work have included AI assistance (ChatGPT, Claude, and Codex). Features listed as tested are based on local builds and verification; hardware acceleration is not implied to work on every GPU or host.
+Documentation and container implementation work have included AI assistance (ChatGPT). All code changes and documentation is looked over manually before publishing and tested locally on my own hardware.
