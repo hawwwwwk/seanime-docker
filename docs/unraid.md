@@ -6,9 +6,9 @@ This guide covers the **Unraid-specific setup** for the community-maintained [`e
 
 ## Install
 
-If Seanime is available in your Unraid **Apps** tab, select it, review the paths and variables, and install it. The template maintained in this repository is [`templates/seanime.xml`](../templates/seanime.xml).
+Seanime is available in your Unraid **Apps** tab. Select it, review the paths and variables, and install it. The template maintained in this repository is [`templates/seanime.xml`](../templates/seanime.xml).
 
-Alternatively, use **Docker → Add Container** to create an equivalent configuration manually using image `ethxn/seanime:latest`. Do not use instructions about adding a legacy template-repository URL; current Unraid installations may no longer expose that option.
+Alternatively, if you really want, use **Docker → Add Container** to create an equivalent configuration manually using image `ethxn/seanime:latest`. 
 
 ## Container settings
 
@@ -35,13 +35,13 @@ Once running, open `http://<UNRAID-SERVER-IP>:43211` (or your chosen host port).
 
 **Intel/AMD:** Expose `/dev/dri` to the container (for example, an appropriate Docker `--device=/dev/dri:/dev/dri` mapping) and ensure the Seanime user can access render/video devices. Device GIDs vary; use Docker supplementary groups instead of assuming Unraid's `PGID=100` is always sufficient.
 
-Read the [hardware acceleration guide](hardware-acceleration.md) for commands and diagnostic checks. NVIDIA NVENC has been hardware-tested; Intel/AMD GPU execution remains unverified by this project.
+Read the [hardware acceleration guide](hardware-acceleration.md) for commands and diagnostic checks.
 
 ## Troubleshooting
 
 - **Web UI unreachable:** Check container logs, host port forwarding, and `SEANIME_SERVER_HOST=0.0.0.0`.
 - **Config permission errors:** Verify the `/config` mapping and ownership for PUID/PGID. The container may adjust `/config` ownership on startup.
-- **Anime library empty or inaccessible:** Confirm the host share mapping and read permissions. Use `/anime` inside Seanime, not the Unraid host path.
+- **Anime library empty or inaccessible:** Confirm the host share mapping and read permissions. Use `/anime` during Seanime's setup (and in settings), not the Unraid host path.
 - **Hardware transcoding fails:** Start with CPU transcoding to confirm basic playback, then verify GPU passthrough, device groups, and the selected hardware backend.
 
 Container-specific problems: [seanime-docker issues](https://github.com/hawwwwwk/seanime-docker/issues). Application issues: [upstream Seanime](https://github.com/5rahim/seanime).
