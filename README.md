@@ -108,4 +108,4 @@ Seanime and this Docker distribution are separate projects. See the repository [
 
 ### AI disclosure
 
-Documentation and container implementation work have included AI assistance (ChatGPT). All code changes and documentation is looked over manually before publishing and tested locally on my own hardware.
+Documentation and container implementation work have included AI assistance (ChatGPT, Local Qwen Models). All code changes and documentation is looked over manually before publishing and tested locally on my own hardware.
