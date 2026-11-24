@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.10.5
+
+- ⚡️ Mobile: Record crash reports and startup failures
+- 🦺 Torrent streaming: Fixed torrents not being announced after file selection
+- 🦺 Real-Debrid: Fixed 403 error when adding torrents #990
+- 🦺 Discord: Fixed Rich Presence failing to connect with profile decorations
+- 🦺 Plugins: Fixed crash when anime and manga API calls fail #988
+- ⬆️ MpvCore: Updated mpv-prism to 0.1.10
+
 ## v3.10.4
 
 - ⚡️ Playlists: Increased episode limit to 200 #757
